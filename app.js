@@ -62,7 +62,7 @@ const exchangeFbToken = (fbToken) => {
     return new Promise((resolve, reject) => {
         https.get("https://graph.facebook.com/oauth/access_token" + query, (res) => {
             if (res.statusCode !== 200) {
-                reject("Got status code " + res.statuscode + " while exchanging fb token");
+                reject("Got status code " + res.statuscode + " while exchanging fb token, " + "https://graph.facebook.com/oauth/access_token" + query);
             } else {
                 let responseData = "";
                 res.on("data", (dataChunk) => {
