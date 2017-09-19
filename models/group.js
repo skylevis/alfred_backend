@@ -2,7 +2,7 @@ const db = require("../db");
 const User = require("./user");
 
 const Group = db.sequelize.define('group', {
-    group_id: { type: db.Sequelize.INTEGER,  primaryKey: true  },
+    groupId: { type: db.Sequelize.INTEGER,  primaryKey: true  },
     name: { type: db.Sequelize.STRING, allowNull:  false },
     password: { type: db.Sequelize.STRING, allowNull:  false}
 });

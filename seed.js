@@ -18,7 +18,7 @@ db.sequelize.dropAllSchemas().then(() => {
         User.sync(),
     ]);
 }).then(() => {
-    return Group.sync()
+    return Group.sync();
 }).then(() => {
     return Membership.sync();
 }).then(() => {
