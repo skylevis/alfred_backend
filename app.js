@@ -147,12 +147,12 @@ passport.use(new passportJwt.Strategy(passportJWTOptions, function(jwtPayload, d
 
 /******************************** User ************************************* */
 
-// app.get("/profile", passport.authenticate(["jwt"], { session: false }), (req, res) => {
-//     let userTokenSubject = req.user;
-//     res.json({
-//         user: userTokenSubject.user
-//     });
-// });
+app.get("/profile", passport.authenticate(["jwt"], { session: false }), (req, res) => {
+    let userTokenSubject = req.user;
+    res.json({
+        user: userTokenSubject.user
+    });
+});
 
 /******************************** Debug ************************************* */
 app.get('/', function (req, res) {
@@ -167,6 +167,3 @@ const ip = config.get("http.ip");
 app.listen("3000", "127.0.0.1", () => {
     console.log("Server started on port 3000");
 });
-
-
-
