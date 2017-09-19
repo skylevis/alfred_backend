@@ -4,35 +4,43 @@ const User = db.sequelize.define('user', {
     //The important part
     user_id:  {
         type: db.Sequelize.STRING,
-       // primaryKey: true,
-        allowNull: true
+        autoIncrement: true,
+        primaryKey: true,
+    },
+    email: {
+        type: db.Sequelize.STRING(255),
+        allowNull: false,
+        unique: true,
     },
     name: {
         type: db.Sequelize.STRING,
-        allowNull:  false
+        allowNull:  false,
     },
     
-    //The no  so  important part
+    //The not so important part
+    fid: {
+        type:db.Sequelize.STRING(255),
+        unique: true,
+    },
     contact_number: {
-        type: db.Sequelize.INTEGER,
+        type: db.Sequelize.STRING(20),
         allowNull:  true,
-        validate: { min:  0,  max:  99999999999}
     },
     address:  {
         type: db.Sequelize.STRING,
-        allowNull:  true
+        allowNull:  true,
     },
     latitude: {
         type: db.Sequelize.FLOAT,
         allowNull:  true,
         defaultValue: null,
-        validate: { min:  -90,  max:  90  }
+        validate: { min:  -90,  max:  90  },
     },
     longitude:  {
         type: db.Sequelize.FLOAT,
         allowNull:  true,
         defaultValue: null,
-        validate: { min:  -180, max:  180 }
+        validate: { min:  -180, max:  180 },
     },
 });
 

@@ -9,12 +9,6 @@ const User = require("./models/user");
 const Group = require("./models/group").Group;
 const Membership = require("./models/group").Membership;
 
-// User.hasMany(Group, {
-//     as: "UserGroup",
-//     foreignKey: "memberId",
-//     sourceKey: "userId"
-// });
-
 // Order is important here
 User.sync();
 Group.sync();
@@ -100,17 +94,17 @@ app.get("/generateServerToken", (req, res) => {
 
         User.findOrCreate({
             where: {
-                fid: fbId
+                fid: fbId,
             },
             defaults: {
-                displayName: fbDisplayName,
-                email: fbPrimaryEmail
+                name: fbDisplayName,
+                email: fbPrimaryEmail,
             }
         }).then((sequelizeResponse) => {
             let user = sequelizeResponse[0].dataValues;
             let userTokenSubject = {
                 user: user,
-                fbToken: newFbToken
+                fbToken: newFbToken,
             };
 
             let jwtToken = generateUserToken(userTokenSubject);
