@@ -147,12 +147,12 @@ passport.use(new passportJwt.Strategy(passportJWTOptions, function(jwtPayload, d
 
 /******************************** User ************************************* */
 
-// app.get("/profile", passport.authenticate(["jwt"], { session: false }), (req, res) => {
-//     let userTokenSubject = req.user;
-//     res.json({
-//         user: userTokenSubject.user
-//     });
-// });
+app.get("/profile", passport.authenticate(["jwt"], { session: false }), (req, res) => {
+    let userTokenSubject = req.user;
+    res.json({
+        user: userTokenSubject.user
+    });
+});
 
 /******************************** Debug ************************************* */
 app.get('/', function (req, res) {
