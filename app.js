@@ -114,6 +114,7 @@ app.get("/generateServerToken", (req, res) => {
         });
     }).catch((err) => {
         res.json({
+            err: err,
             token: null
         });
     });
