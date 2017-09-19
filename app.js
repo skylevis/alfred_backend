@@ -2,9 +2,12 @@ const _ = require("lodash");
 const express = require("express");
 const config = require("./config");
 const db = require("./db");
+const user = require("./routes/user");
 
 /*************************** Associations ********************************** */
-//const User = require("./models/user");
+const User = require("./models/user");
+const Group = require("./models/group").Group;
+const Membership = require("./models/group").Membership;
 
 // User.hasMany(Group, {
 //     as: "UserGroup",
@@ -13,10 +16,15 @@ const db = require("./db");
 // });
 
 // Order is important here
-//User.sync();
+User.sync();
+Group.sync();
+Membership.sync();
+
+/************************************************************************** */
 
 const app = express();
 const bodyParser = require("body-parser");
+app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json());
 
 app.use((req, res, next) => {
@@ -155,6 +163,8 @@ passport.use(new passportJwt.Strategy(passportJWTOptions, function(jwtPayload, d
 app.get('/', function (req, res) {
     res.send('Hello World!')
 })
+
+app.use('/user', user);
 
 const port = config.get("http.port");
 const ip = config.get("http.ip");

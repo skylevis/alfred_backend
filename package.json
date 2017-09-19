@@ -23,10 +23,12 @@
     "express": "^4.15.4",
     "jsonwebtoken": "^7.4.3",
     "lodash": "^4.17.4",
+    "mysql": "^2.14.1",
     "mysql2": "^1.4.2",
     "passport": "^0.4.0",
     "passport-facebook": "^2.1.1",
     "passport-jwt": "^3.0.0",
-    "sequelize": "^4.7.5"
+    "sequelize": "^4.7.5",
+    "webpack-dev-server": "^2.8.2"
   }
 }

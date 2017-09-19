@@ -1,0 +1,10 @@
+export MYSQL_DATABASE=ALFRED
+export MYSQL_HOST=localhost
+export MYSQL_PORT=3306
+export MYSQL_USER=alfred
+export MYSQL_PASSWORD=Alfred343$
+
+
+Alfred4321$
+username : alfred,
+password : Alfred343$
