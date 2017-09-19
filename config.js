@@ -17,12 +17,12 @@ const config = convict({
         facebook: {
             clientId: {
                 doc: "The Client ID from Facebook to use for authentication",
-                default: "865806110251208",
+                default: "",
                 env: "FACEBOOK_CLIENT_ID"
             },
             clientSecret: {
                 doc: "The Client Secret from Facebook to use for authentication",
-                default: "9d3e7db5af6909ea2cea866f3432ba34",
+                default: "",
                 env: "FACEBOOK_CLIENT_SECRET"
             }
         },
