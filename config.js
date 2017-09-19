@@ -46,7 +46,7 @@ const config = convict({
         mysql: {
             name: {
                 doc: "The name of the database",
-                default: "alfred",
+                default: "ALFRED",
                 env: "MYSQL_DATABASE"
             },
             port: {
@@ -61,12 +61,12 @@ const config = convict({
             },
             user: {
                 doc: "The user for database login",
-                default: "root",
+                default: "alfred",
                 env: "MYSQL_USER"
             }, 
             password: {
                 doc: "The password for database login", 
-                default: "alfred123", 
+                default: "Alfred343$", 
                 env: "MYSQL_PASSWORD"
             }
         }
