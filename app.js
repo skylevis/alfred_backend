@@ -167,6 +167,3 @@ const ip = config.get("http.ip");
 app.listen("3000", "127.0.0.1", () => {
     console.log("Server started on port 3000");
 });
-
-
-
