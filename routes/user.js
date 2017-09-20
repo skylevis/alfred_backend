@@ -27,11 +27,8 @@ router.get('/:user_id', function(req, res){
 	// 	res.status(500).send("Error getting user");
 	// })
 
-	User.findById({
-        where: {
-            userId: req.params.user_id
-        }
-    }).then((rawUser) => {
+	User.findById(req.params.user_id)
+	.then((rawUser) => {
         if (_.isEmpty(rawUser)) {
             res.json({
                 user: null
