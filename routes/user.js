@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const User = require("../models/user");
+const _ = require("lodash");
 
 router.post('/create', function(req, res){
 	var source = ['POST /user/create'];
