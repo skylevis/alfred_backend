@@ -17,15 +17,33 @@ router.post('/create', function(req, res){
 });
 
 router.get('/:user_id', function(req, res){
-	var source = ['GET /user/id'];
-	User.findById(req.params.user_id)
-	.then(function(user){
-		console.log(source, 'Success: userId:' + req.body.id + ' got profile');
-		res.send(user);
-	}).catch(function(e){
-		console.log(source, e);
-		res.status(500).send("Error getting user");
-	})
+	// var source = ['GET /user/id'];
+	// User.findById(req.params.user_id)
+	// .then(function(user){
+	// 	console.log(source, 'Success: userId:' + req.body.id + ' got profile');
+	// 	res.send(user);
+	// }).catch(function(e){
+	// 	console.log(source, e);
+	// 	res.status(500).send("Error getting user");
+	// })
+
+	User.findById({
+        where: {
+            userId: req.params.user_id
+        }
+    }).then((rawUser) => {
+        if (_.isEmpty(rawUser)) {
+            res.json({
+                user: null
+            });
+        } else {
+            let user = rawUser.dataValues;
+
+            res.json({
+                user: user
+            });
+        }
+    });
 })	
 
 router.post('/:user_id', function(req, res){
