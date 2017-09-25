@@ -59,54 +59,109 @@ router.post('/update', passport.authenticate(["jwt"], { session: false }), (req,
 	var source = ['POST /user/update'];
 	let userTokenSubject = req.user;
 
-	let updatePromise = new Promise((resolve, reject) => {
-		User.findById(userTokenSubject.user.userId)
-		.then(function(user){
-			if(req.body.contact_number){
-				user.updateAttributes({
-					contact_number: req.body.contact_number
-				}).then(function(){
-					console.log("Success updating contact_number");
-					resolve(user);
-				})
-			}
-			if(req.body.address){
-				user.updateAttributes({
-					address: req.body.address
-				}).then(function(){
-					console.log("Success updating address");
-					resolve(user);
-				})
-			}
-			if(req.body.latitude){
-				user.updateAttributes({
-					latitude: req.body.latitude
-				}).then(function(){
-					console.log("Success updating latitude");
-					resolve(user);
-				})
-			}
-			if(req.body.longitude){
-				user.updateAttributes({
-					longitude: req.body.longitude
-				}).then(function(){
-					console.log("Success updating longitude");
-					resolve(user);
-				})
-			}	
-		}).catch(function(e){
-			console.log(source, e);
-			res.status(500).send("Error getting user");
-		})
-	});
+	let userId = userTokenSubject.user.userId;
+	let email = req.body.email;
+	var contact_number = req.body.contact_number;
+	var address = req.body.address;
+	var longitude = req.body.longitude;
+	var latitude = req.body.latitude;
 
-	updatePromise.then((user) => {
-		res.send(user);
+	if (email) {
+		if (email.indexOf("@") == -1) {
+			res.json({
+				status: "Error: Invalid Email"
+			})
+			return;
+		}
+	}
+	
+	if (contact_number) {
+		contact_number = contact_number.trim().replace(" ", "");
+		if (contact_number.length < 8) {
+			res.json({
+				status: "Error: Invalid Contact Number"
+			})
+		}
+	}
+
+	if (address) {
+		address = address.trim();
+		if (address.length == 0) {
+			address = null;
+		}
+	}
+
+	User.update({
+		email: email,
+		contact_number: contact_number,
+		address: address,
+		longitude: longitude,
+		latitude: latitude
+	},{
+		where: {
+			userId: userId
+		}
+	}).then((updateResult) => {
+		if (updateResult[0] !== 1) {
+			console.log(source, "error");
+			res.json({
+				status: "error"
+			});
+		} else {
+			res.json({
+				status: "success"
+			});
+		}
 	})
-	.catch(function(e){
-		console.log(source, e);
-		res.status(500).send("Error updating user");
-	})
+
+	// let updatePromise = new Promise((resolve, reject) => {
+	// 	User.findById(userTokenSubject.user.userId)
+	// 	.then(function(user){
+	// 		if(req.body.contact_number){
+	// 			user.updateAttributes({
+	// 				contact_number: req.body.contact_number
+	// 			}).then(function(){
+	// 				console.log("Success updating contact_number");
+	// 				resolve(user);
+	// 			})
+	// 		}
+	// 		if(req.body.address){
+	// 			user.updateAttributes({
+	// 				address: req.body.address
+	// 			}).then(function(){
+	// 				console.log("Success updating address");
+	// 				resolve(user);
+	// 			})
+	// 		}
+	// 		if(req.body.latitude){
+	// 			user.updateAttributes({
+	// 				latitude: req.body.latitude
+	// 			}).then(function(){
+	// 				console.log("Success updating latitude");
+	// 				resolve(user);
+	// 			})
+	// 		}
+	// 		if(req.body.longitude){
+	// 			user.updateAttributes({
+	// 				longitude: req.body.longitude
+	// 			}).then(function(){
+	// 				console.log("Success updating longitude");
+	// 				resolve(user);
+	// 			})
+	// 		}	
+	// 	}).catch(function(e){
+	// 		console.log(source, e);
+	// 		res.status(500).send("Error getting user");
+	// 	})
+	// });
+
+	// updatePromise.then((user) => {
+	// 	res.send(user);
+	// })
+	// .catch(function(e){
+	// 	console.log(source, e);
+	// 	res.status(500).send("Error updating user");
+	// })
 
 })	
 
