@@ -3,6 +3,8 @@ const express = require("express");
 const config = require("./config");
 const db = require("./db");
 const user = require("./routes/user");
+const group = require("./routes/group");
+const membership = require("./routes/membership");
 
 /*************************** Associations ********************************** */
 const User = require("./models/user");
@@ -10,9 +12,9 @@ const Group = require("./models/group").Group;
 const Membership = require("./models/group").Membership;
 
 // Order is important here
-User.sync();
-Group.sync();
-Membership.sync();
+//User.sync();
+//Group.sync();
+//Membership.sync();
 
 /************************************************************************** */
 
@@ -160,6 +162,8 @@ app.get('/', function (req, res) {
 })
 
 app.use('/user', user);
+app.use('/group', group);
+app.use('/membership', membership);
 
 const port = config.get("http.port");
 const ip = config.get("http.ip");
