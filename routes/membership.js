@@ -28,6 +28,8 @@ router.post("/create", passport.authenticate(["jwt"], { session: false }), (req,
 						"groupId": group.groupId
 					});
 				})
+			} else {
+				res.send({"status": "incorrect password"});
 			}
 		})
 		.catch(e =>{
