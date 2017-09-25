@@ -23,7 +23,10 @@ router.post("/create", passport.authenticate(["jwt"], { session: false }), (req,
 				group.addMember(user)
 				.then(function(){
 					console.log('user added to group');
-					res.send({"status": "success"});
+					res.send({
+						"status": "success",
+						"groupId": group.groupId
+					});
 				})
 			}
 		})
