@@ -31,7 +31,7 @@ router.get("/profile", passport.authenticate(["jwt"], { session: false }), (req,
     var source = ['GET /user/profile'];
     
     let userTokenSubject = req.user;
-    User.findById(userTokenSubject.userId)
+    User.findById(userTokenSubject.user.userId)
 	.then(user => {
 		res.json({
 			user: user
