@@ -21,7 +21,10 @@ router.post("/create", passport.authenticate(["jwt"], { session: false }), (req,
 			User.findById(userTokenSubject.user.userId)
 			.then(user => {
 				user.addGroupings(group);
-				res.send({"status": "success"});
+				res.send({
+					"status": "success",
+					"groupId": group.groupId,
+			});
 				console.log(source, 'Success: Created groupId:' + group.groupId);
 			})
 		})
