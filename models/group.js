@@ -3,7 +3,7 @@ const User = require("./user");
 
 const Group = db.sequelize.define('group', {
     groupId: { type: db.Sequelize.INTEGER, allowNull: false, autoIncrement: true, primaryKey: true},
-    name: { type: db.Sequelize.STRING, allowNull:  false },
+    name: { type: db.Sequelize.STRING, allowNull:  false, unique: true },
     password: { type: db.Sequelize.STRING, allowNull:  false},
     ownerId: { type: db.Sequelize.INTEGER, allowNull: false}
 });
