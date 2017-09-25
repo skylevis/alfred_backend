@@ -13,9 +13,13 @@ router.post("/create", passport.authenticate(["jwt"], { session: false }), (req,
 
 	User.findById(userTokenSubject.user.userId)
 	.then(user =>{
-		Group.findById(req.body.group.groupId)
+		Group.findOne({
+			where: {
+				name: req.body.name
+			}
+		})
 		.then(group =>{
-			if(passwordHash.verify(req.body.group.password, group.password)){
+			if(passwordHash.verify(req.body.password, group.password)){
 				group.addMember(user)
 				.then(function(){
 					console.log('user added to group');

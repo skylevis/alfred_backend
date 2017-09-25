@@ -11,6 +11,19 @@ router.post("/create", passport.authenticate(["jwt"], { session: false }), (req,
 	var source = ['POST /group/create'];
 	let userTokenSubject = req.user;
 
+	Group.findOne({
+		where: {
+			name: req.body.name
+		}
+	}).then(group => {
+		if (group) {
+			res.send({
+				"status": "name taken" 
+			})
+			return;
+		}
+	})
+
 	if(req.body.password.length >= 8){
 		Group.create({
 			name: req.body.name,
