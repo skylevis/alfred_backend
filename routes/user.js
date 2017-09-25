@@ -44,7 +44,10 @@ router.get('/profile/:userId', passport.authenticate(["jwt"], { session: false }
 
 	User.findById(req.params.userId)
 	.then(user2 => {
-		res.send(user2);
+		//res.send(user2);
+		res.json({
+			user: user2
+		});
 	})
 	.catch(e => {
 		console.log(source, e);
