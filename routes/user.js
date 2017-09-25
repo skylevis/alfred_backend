@@ -31,9 +31,16 @@ router.get("/profile", passport.authenticate(["jwt"], { session: false }), (req,
     var source = ['GET /user/profile'];
     
     let userTokenSubject = req.user;
-    res.json({
-        user: userTokenSubject.user
-    });
+    User.findById(userTokenSubject.userId)
+	.then(user => {
+		res.json({
+			user: user
+		});
+	})
+	.catch(e => {
+		console.log(source, e);
+		res.status(500).send("Error getting user");
+	})
 });
 
 
@@ -44,7 +51,6 @@ router.get('/profile/:userId', passport.authenticate(["jwt"], { session: false }
 
 	User.findById(req.params.userId)
 	.then(user2 => {
-		//res.send(user2);
 		res.json({
 			user: user2
 		});
