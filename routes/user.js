@@ -81,6 +81,7 @@ router.post('/update', passport.authenticate(["jwt"], { session: false }), (req,
 			res.json({
 				status: "Error: Invalid Contact Number"
 			})
+			return;
 		}
 	}
 
