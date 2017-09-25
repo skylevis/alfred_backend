@@ -40,6 +40,12 @@ const config = convict({
                 doc: "The audience for the JWT",
                 default: "thealfredbutler.com"
             }
+        }, googlemaps: {
+            apiKey: {
+                doc: "Google Maps Api Key",
+                default: "",
+                env: "GOOGLE_MAPS_API_KEY"
+            }
         }
     }, 
     database: {
