@@ -19,17 +19,21 @@ router.post("/create", passport.authenticate(["jwt"], { session: false }), (req,
 			}
 		})
 		.then(group =>{
-			if(passwordHash.verify(req.body.password, group.password)){
-				group.addMember(user)
-				.then(function(){
-					console.log('user added to group');
-					res.send({
-						"status": "success",
-						"groupId": group.groupId
-					});
-				})
-			} else {
+			if (!group) {
 				res.send({"status": "incorrect password"});
+			} else {
+				if(passwordHash.verify(req.body.password, group.password)){
+					group.addMember(user)
+					.then(function(){
+						console.log('user added to group');
+						res.send({
+							"status": "success",
+							"groupId": group.groupId
+						});
+					})
+				} else {
+					res.send({"status": "incorrect password"});
+				}
 			}
 		})
 		.catch(e =>{
