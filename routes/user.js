@@ -50,24 +50,32 @@ router.get('/profile/:userId', passport.authenticate(["jwt"], { session: false }
 	var source = ['GET /user/profile/:userId'];
 	
 	let userTokenSubject = req.user;
+	var groups = 0;
 
 	User.findById(req.params.userId)
 	.then(user2 => {
 		User.findById(userTokenSubject.user.userId)
 		.then(user1 => {
+			var sent = false;
 			user1.getGroupings()
 			.then(groupings => {
 				groupings.forEach(grouping => {
+					groups++;
 					grouping.hasMembers([user2])
 					.then(data => {
-						if(data)
+						if(data) {
+							sent = true;
 							res.json({
 								user: user2
 							});
-						else
-							res.send("Error getting user");
+						}
+						if(!sent && groupings.length == groups)
+							done();
 					})
-				})
+					.catch(e => {
+						console.log(e);
+					})
+				});
 			})
 		})
 	})
@@ -75,6 +83,13 @@ router.get('/profile/:userId', passport.authenticate(["jwt"], { session: false }
 		console.log(source, e);
 		res.status(500).send("Error getting user");
 	})	
+
+	function done() {
+		console.log("no common group");
+		res.json({
+			user: null
+		});	
+	}
 })	
 
 router.post('/update', passport.authenticate(["jwt"], { session: false }), (req, res) => {
