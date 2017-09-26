@@ -77,6 +77,10 @@ router.get('/profile/:userId', passport.authenticate(["jwt"], { session: false }
 							user: null
 						})
 					}
+				}).catch (e => {
+					res.json({
+						user: null
+					})
 				})
 			})
 		})
