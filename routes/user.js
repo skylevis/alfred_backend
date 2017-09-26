@@ -66,7 +66,7 @@ router.get('/profile/:userId', passport.authenticate(["jwt"], { session: false }
 				Promise.all(groupHasMember)
 				.then(response => {
 					let hasMember = response.reduce((x, y) => {
-						return x && y;
+						return x || y;
 					})
 					if (hasMember) {
 						res.json({
