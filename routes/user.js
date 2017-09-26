@@ -57,42 +57,34 @@ router.get('/profile/:userId', passport.authenticate(["jwt"], { session: false }
 	.then(user2 => {
 		User.findById(userTokenSubject.user.userId)
 		.then(user1 => {
-			var sent = false;
 			user1.getGroupings()
 			.then(groupings => {
-				var groups = 0;
-				var sent = false;
-				groupings.forEach(grouping => {
-					groups++;
-					grouping.hasMembers([user2])
-					.then(data => {
-						if(data) {
-							sent = true;
-							res.json({
-								user: user2
-							});
-						}
-						if(!sent && groupings.length == groups)
-							done();
+				let groupHasMember = groupings.map(grouping => {
+					return grouping.hasMembers([user2]);
+				})
+				
+				Promise.all(groupHasMember)
+				.then(response => {
+					let hasMember = response.reduce((x, y) => {
+						return x && y;
 					})
-					.catch(e => {
-						console.log(e);
-					})
-				});
+					if (hasMember) {
+						res.json({
+							user: user2
+						})
+					} else {
+						res.json({
+							user: null
+						})
+					}
+				})
 			})
 		})
 	})
 	.catch(e => {
 		console.log(source, e);
 		res.status(500).send("Error getting user");
-	})	
-
-	function done() {
-		console.log("no common group");
-		res.json({
-			user: null
-		});	
-	}
+	})
 })	
 
 router.post('/update', passport.authenticate(["jwt"], { session: false }), (req, res) => {
