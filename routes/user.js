@@ -73,7 +73,7 @@ router.get('/profile/:userId', passport.authenticate(["jwt"], { session: false }
 							});
 						}
 						if(!sent && groupings.length == groups)
-							done();)
+							done();
 					})
 					.catch(e => {
 						console.log(e);
@@ -88,10 +88,7 @@ router.get('/profile/:userId', passport.authenticate(["jwt"], { session: false }
 	})	
 
 	function done() {
-<<<<<<< HEAD
 		console.log("no common group");
-=======
->>>>>>> e757b4d0738257c3224aa8d6311acc7e245f6624
 		res.json({
 			user: null
 		});	
