@@ -65,7 +65,9 @@ router.get('/profile/:userId', passport.authenticate(["jwt"], { session: false }
 								user: user2
 							});
 						else
-							res.send("Error getting user");
+							res.json({
+								user: null
+							})
 					})
 				})
 			})
