@@ -79,8 +79,16 @@ router.post("/delete", passport.authenticate(["jwt"], { session: false }), (req,
 	.then(user =>{
 		Group.findById(req.body.groupId)
 		.then(group => {
-			user.removeGrouping(group);
-			res.send({"status": "success"});
+			if(group.ownerId == userTokenSubject.user.userId)
+				group.destroy()
+				.then(function(){
+					console.log('owner');
+					res.send({"status": "success"});		
+				})
+			else {	
+				user.removeGrouping(group);
+				res.send({"status": "success"});
+			}
 		})
 	})	
 	.catch(e =>{
