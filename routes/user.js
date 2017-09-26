@@ -4,6 +4,8 @@ const User = require("../models/user");
 const Membership = require("../models/group").Membership;
 const _ = require("lodash");
 const passport = require("passport");
+const request = require('request');
+const config = require("../config");
 
 router.post('/create', function(req, res){
 	var source = ['POST /user/create'];
@@ -51,9 +53,23 @@ router.get('/profile/:userId', passport.authenticate(["jwt"], { session: false }
 
 	User.findById(req.params.userId)
 	.then(user2 => {
-		res.json({
-			user: user2
-		});
+		User.findById(userTokenSubject.user.userId)
+		.then(user1 => {
+			user1.getGroupings()
+			.then(groupings => {
+				groupings.forEach(grouping => {
+					grouping.hasMembers([user2])
+					.then(data => {
+						if(data)
+							res.json({
+								user: user2
+							});
+						else
+							res.send("Error getting user");
+					})
+				})
+			})
+		})
 	})
 	.catch(e => {
 		console.log(source, e);
@@ -71,6 +87,7 @@ router.post('/update', passport.authenticate(["jwt"], { session: false }), (req,
 	var address = req.body.address;
 	var longitude = req.body.longitude;
 	var latitude = req.body.latitude;
+	var googleKey = config.get("authentication.googlemaps.apiKey");
 
 	if (email) {
 		if (email.indexOf("@") == -1) {
@@ -96,30 +113,70 @@ router.post('/update', passport.authenticate(["jwt"], { session: false }), (req,
 		if (address.length == 0) {
 			address = null;
 		}
+		else{
+			request('https://maps.googleapis.com/maps/api/geocode/json?address='+address+'&key='+googleKey,function(error, response, body) {
+		      body = JSON.parse(body);
+		    //  console.log(body.results);
+		      if (body.results.length != 0) {
+		      	latitude = body.results[0].geometry.location.lat;
+		      	longitude = body.results[0].geometry.location.lng;
+		      	User.update({
+					email: email,
+					contact_number: contact_number,
+					address: address,
+					longitude: longitude,
+					latitude: latitude
+				},{
+					where: {
+						userId: userId
+					}
+				}).then((updateResult) => {
+					if (updateResult[0] !== 1) {
+						console.log(source, "error");
+						res.json({
+							status: "error"
+						});
+					} else {
+						res.json({
+							status: "success"
+						});
+					}
+				})
+		      } else {
+		        res.json({
+					status: "Error: Invalid Address"
+				})
+		      }
+		    });
+		}
+	}
+	else {
+		User.update({
+			email: email,
+			contact_number: contact_number,
+			address: address,
+			longitude: longitude,
+			latitude: latitude
+		},{
+			where: {
+				userId: userId
+			}
+		}).then((updateResult) => {
+			if (updateResult[0] !== 1) {
+				console.log(source, "error");
+				res.json({
+					status: "error"
+				});
+			} else {
+				res.json({
+					status: "success"
+				});
+			}
+		})
 	}
 
-	User.update({
-		email: email,
-		contact_number: contact_number,
-		address: address,
-		longitude: longitude,
-		latitude: latitude
-	},{
-		where: {
-			userId: userId
-		}
-	}).then((updateResult) => {
-		if (updateResult[0] !== 1) {
-			console.log(source, "error");
-			res.json({
-				status: "error"
-			});
-		} else {
-			res.json({
-				status: "success"
-			});
-		}
-	})
+	
+
 
 	// let updatePromise = new Promise((resolve, reject) => {
 	// 	User.findById(userTokenSubject.user.userId)
