@@ -49,6 +49,7 @@ router.get("/profile", passport.authenticate(["jwt"], { session: false }), (req,
 router.get('/profile/:userId', passport.authenticate(["jwt"], { session: false }),(req, res) => {
 	var source = ['GET /user/profile/:userId'];
 	
+
 	let userTokenSubject = req.user;
 	var groups = 0;
 
@@ -59,6 +60,8 @@ router.get('/profile/:userId', passport.authenticate(["jwt"], { session: false }
 			var sent = false;
 			user1.getGroupings()
 			.then(groupings => {
+				var groups = 0;
+				var sent = false;
 				groupings.forEach(grouping => {
 					groups++;
 					grouping.hasMembers([user2])
@@ -85,7 +88,10 @@ router.get('/profile/:userId', passport.authenticate(["jwt"], { session: false }
 	})	
 
 	function done() {
+<<<<<<< HEAD
 		console.log("no common group");
+=======
+>>>>>>> e757b4d0738257c3224aa8d6311acc7e245f6624
 		res.json({
 			user: null
 		});	
