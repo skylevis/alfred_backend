@@ -70,7 +70,7 @@ router.get('/profile/:userId', passport.authenticate(["jwt"], { session: false }
 							});
 						}
 						if(!sent && groupings.length == groups)
-							done();
+							done();)
 					})
 					.catch(e => {
 						console.log(e);
