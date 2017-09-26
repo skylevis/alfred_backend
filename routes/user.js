@@ -49,6 +49,7 @@ router.get("/profile", passport.authenticate(["jwt"], { session: false }), (req,
 router.get('/profile/:userId', passport.authenticate(["jwt"], { session: false }),(req, res) => {
 	var source = ['GET /user/profile/:userId'];
 	
+
 	let userTokenSubject = req.user;
 
 	User.findById(req.params.userId)
@@ -57,15 +58,22 @@ router.get('/profile/:userId', passport.authenticate(["jwt"], { session: false }
 		.then(user1 => {
 			user1.getGroupings()
 			.then(groupings => {
+				var groups = 0;
+				var sent = false;
 				groupings.forEach(grouping => {
+					groups++;
 					grouping.hasMembers([user2])
 					.then(data => {
-						if(data)
+						if(data) {
+							sent = true;
 							res.json({
 								user: user2
 							});
-						else
-							res.send("Error getting user");
+						}
+						if(!sent && groupings.length == groups){
+							console.log(groups);
+							done();
+						}
 					})
 				})
 			})
@@ -75,6 +83,12 @@ router.get('/profile/:userId', passport.authenticate(["jwt"], { session: false }
 		console.log(source, e);
 		res.status(500).send("Error getting user");
 	})	
+
+	function done() {
+		res.json({
+			user: null
+		});	
+	}
 })	
 
 router.post('/update', passport.authenticate(["jwt"], { session: false }), (req, res) => {
