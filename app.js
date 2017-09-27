@@ -176,7 +176,7 @@ app.get("/uber", (req, res) => {
         console.log(response, body);
         if (!error && response.statusCode == 200) {
             res.json({
-                res: body
+                res: JSON.parse(body)
             })
         } else {
             res.json({
