@@ -5,6 +5,7 @@ const db = require("./db");
 const user = require("./routes/user");
 const group = require("./routes/group");
 const membership = require("./routes/membership");
+const request = require('request');
 
 /*************************** Associations ********************************** */
 const User = require("./models/user");
@@ -155,6 +156,38 @@ app.get("/profile", passport.authenticate(["jwt"], { session: false }), (req, re
         user: userTokenSubject.user
     });
 });
+
+/******************************** Uber ************************************* */
+var uberKey = config.get("authentication.uber.apiKey");
+
+app.get("/uber", (req, res) => {
+    let startLat = getReviewLimit(Number(req.query.lat));
+    let startLng = getReviewOffset(Number(req.query.lng));
+
+    var options = {
+        url: 'https://api.uber.com/v1.2/estimates/time?start_latitude=' + startLat + '&start_longitude=' + startLng,
+        headers: {
+            'Authorization': 'Token ' + uberKey,
+            'Content-Type': 'application/json'
+        }
+    };
+       
+    function callback(error, response, body) {
+        console.log(response, body);
+        if (!error && response.statusCode == 200) {
+            res.json({
+                res: body
+            })
+        } else {
+            res.json({
+                res: null
+            })
+        }
+    }
+       
+    request(options, callback);
+})
+
 
 /******************************** Debug ************************************* */
 app.get('/', function (req, res) {

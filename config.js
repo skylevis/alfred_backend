@@ -46,6 +46,12 @@ const config = convict({
                 default: "",
                 env: "GOOGLE_MAPS_API_KEY"
             }
+        }, uber: {
+            apiKey: {
+                doc: "Uber Api Key",
+                default: "",
+                env: "UBER_API_KEY"
+            }
         }
     }, 
     database: {
