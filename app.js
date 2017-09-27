@@ -161,8 +161,8 @@ app.get("/profile", passport.authenticate(["jwt"], { session: false }), (req, re
 var uberKey = config.get("authentication.uber.apiKey");
 
 app.get("/uber", (req, res) => {
-    let startLat = getReviewLimit(Number(req.query.lat));
-    let startLng = getReviewOffset(Number(req.query.lng));
+    let startLat = Number(req.query.lat);
+    let startLng = Number(req.query.lng);
 
     var options = {
         url: 'https://api.uber.com/v1.2/estimates/time?start_latitude=' + startLat + '&start_longitude=' + startLng,
